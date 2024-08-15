@@ -9,8 +9,8 @@
 - Option to load previously generated patchfile Reports to make (small) changes or use as base for another;
 - Install button that copies the files of selected Generated Mod to the FC2 Game folder added in settings;
 
-With the "***Single Weapon only***" dropdowns you can control all loudouts at once.<br>
-Add 1 primary and/or secondary instantly in all loudouts to play with a single weapon, disable all for a NoWeapon mod or separately set any of the primary or secondary weapons instantly in all loudouts (e.g. when you only want to allow 1 class)
+With the "***Single Weapon only***" dropdowns you can control all loadouts at once.<br>
+Add 1 primary and/or secondary instantly in all loadouts to play with a single weapon, disable all for a NoWeapon mod or separately set any of the primary or secondary weapons instantly in all loadouts (e.g. when you only want to allow 1 class)
 ## Overview of current supported settings:
 ![FC2SMG_Collections](https://github.com/user-attachments/assets/255d8772-7d6b-4371-8a5e-92587327322c)<br>
 Here you can add values split by ';' which are automatically added to the dropdown behind the textbox,
