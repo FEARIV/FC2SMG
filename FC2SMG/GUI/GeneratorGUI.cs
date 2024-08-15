@@ -4,17 +4,25 @@ using FC2SMG.Reports;
 using ServerModGenerator.GUI;
 using System.Diagnostics;
 
-// Add converter for combobox-names to XML weaponnames!
-// Add option to select grenade or molotov (or disable?)
+// Add option for knife-only weapon mod.
+// Add option to select grenade or molotov (or disable?) and maybe amount too.
 
 namespace ServerModGenerator
 {
     public partial class GeneratorGUI : Form
     {
-        //string version = "v20220327";
         public ComboBox[] WeaponDropdownAll { get; set; }
-        public ComboBox[] WeaponDropDownPrimary { get; set; }
-        public ComboBox[] WeaponDropDownSecondary { get; set; }
+        public ComboBox[] PrimaryAllLoadout { get; set; }
+        public ComboBox[] Primary1Loadout { get; set; }
+        public ComboBox[] Primary2Loadout { get; set; }
+        public ComboBox[] Primary3Loadout { get; set; }
+        public ComboBox[] FiltersPrimary { get; set; }
+        public ComboBox[] SecondaryAllLoadout { get; set; }
+        public ComboBox[] Secondary1Loadout { get; set; }
+        public ComboBox[] Secondary2Loadout { get; set; }
+        public ComboBox[] FiltersSecondary { get; set; }
+
+        private Dictionary<TextBox, ComboBox> _textBoxComboBoxMap;
         public TextBox[] SettingsCollection = Array.Empty<TextBox>();
         private GeneratorController controller;
         private WeaponCollections weaponCollections;
@@ -30,13 +38,12 @@ namespace ServerModGenerator
         {
             InitializeComponent();
             Text += " " + Strings.SMG_Version;
-            ColorGUI();
             settings = new(this);
             controller = new GeneratorController(this);
             pWeaponPanels.AutoScroll = true;
             controller = new GeneratorController(this);
             weaponCollections = new WeaponCollections();
-            SettingsCollection = new TextBox[] { tbDaytimeSpeed, tbRespawnTimes, tbSpawnShields, tbZoneDeathTimes, tbPreRoundTimes, tbPostRoundTimes }; // tbDayTimeValues, tbDayTimeNames, 
+            SettingsCollection = new TextBox[] { tbDaytimeSpeed, tbRespawnTimes, tbSpawnShields, tbZoneDeathTimes, tbScoresCTD, tbPreRoundTimes, tbPostRoundTimes }; // tbDayTimeValues, tbDayTimeNames, 
             XMLparser = new XMLParser(this);
             reportManager = new(this);
             controller.AddDefaultLoadout();
@@ -44,90 +51,76 @@ namespace ServerModGenerator
             controller.FillDropDowns();
             SetDefaultDropDownIndex();
             ArrangeDropDownEvents();
+            InitializeTextBoxComboBoxMap();
+            foreach (TextBox valueCollection in SettingsCollection)
+            {
+                valueCollection.KeyPress += KeyPressPreventChars;
+                valueCollection.TextChanged += TextChangedValidateInput;
+            }
+            foreach (var textBox in _textBoxComboBoxMap.Keys)
+            {
+                textBox.TextChanged += TextBox_TextChanged;
+            }
             tbPathPatchFile.ContextMenuStrip = new ContextMenuStrip();
             fc2slpanel = new(this);
             tabPage3.Controls.Add(fc2slpanel);
             AddGeneratedMods();
         }
 
-        private void ColorGUI()
+        private void InitializeTextBoxComboBoxMap()
         {
-            tabPage1.BackColor = ColorBox.backGround;
-            pLoadOutControls.BackColor = ColorBox.backGround;
-            pWeaponPanels.BackColor = ColorBox.backGround;
-            comboxSingleWeaponPrimary.BackColor = ColorBox.backGround;
-            comboxSingleWeaponSecondary.BackColor = ColorBox.backGround;
-            comboxSingleWeaponPrimary.ForeColor = ColorBox.textContent;
-            comboxSingleWeaponSecondary.ForeColor = ColorBox.textContent;
-            lSingleWeaponPrimary.ForeColor = ColorBox.textTitle;
-            lSingleWeaponSecondary.ForeColor = ColorBox.textTitle;
-            lSingleWeapons.ForeColor = ColorBox.textContent;
-            lWeaponLoadOut.ForeColor = ColorBox.textContent;
+            _textBoxComboBoxMap = new Dictionary<TextBox, ComboBox>
+            {
+                { tbRespawnTimes, comboxDefaultRespawnTime },
+                { tbSpawnShields, comboxDefaultSpawnShield },
+                { tbDaytimeSpeed, comboxDefaultDaytimeSpeed },
+                { tbZoneDeathTimes, comboxDefaultZoneDeathTime },
+                { tbPreRoundTimes, comboxDefaultPreRoundTime },
+                { tbPostRoundTimes, comboxDefaultPostRoundTime },
+                { tbScoresDM, comboxDefaultScoreDM },
+                { tbScoresTDM, comboxDefaultScoreTDM },
+                { tbScoresCTD, comboxDefaultScoreCTD },
+                { tbScoresUPR, comboxDefaultScoreUPR }
+            };
+        }
 
-            tabPage2.BackColor = ColorBox.backGround;
-            tabPage3.BackColor = ColorBox.backGround;
-            lCollectionInfo.ForeColor = ColorBox.textContent;
-            lDayTime.ForeColor = ColorBox.Disabled;
-            lDayTimeNames.ForeColor = ColorBox.Disabled;
-            lDayTimeSpeed.ForeColor = ColorBox.textTitle;
-            lRespawnTimes.ForeColor = ColorBox.textTitle;
-            lShields.ForeColor = ColorBox.textTitle;
-            lZones.ForeColor = ColorBox.textTitle;
-            lPreRound.ForeColor = ColorBox.textTitle;
-            lPostRoundTimes.ForeColor = ColorBox.textTitle;
-            tbDayTimeValues.BackColor = ColorBox.backGround;
-            tbDayTimeNames.BackColor = ColorBox.backGround;
-            tbDaytimeSpeed.BackColor = ColorBox.backGround;
-            tbRespawnTimes.BackColor = ColorBox.backGround;
-            tbSpawnShields.BackColor = ColorBox.backGround;
-            tbZoneDeathTimes.BackColor = ColorBox.backGround;
-            tbPreRoundTimes.BackColor = ColorBox.backGround;
-            tbPostRoundTimes.BackColor = ColorBox.backGround;
-            tbDayTimeValues.ForeColor = ColorBox.Disabled;
-            tbDayTimeNames.ForeColor = ColorBox.Disabled;
-            tbDaytimeSpeed.ForeColor = ColorBox.textContent;
-            tbRespawnTimes.ForeColor = ColorBox.textContent;
-            tbSpawnShields.ForeColor = ColorBox.textContent;
-            tbZoneDeathTimes.ForeColor = ColorBox.textContent;
-            tbPreRoundTimes.ForeColor = ColorBox.textContent;
-            tbPostRoundTimes.ForeColor = ColorBox.textContent;
-
-            comboxDefaultSpawnShield.BackColor = ColorBox.backGround;
-            comboxDefaultSpawnShield.ForeColor = Color.Chartreuse;
-            comboxDefaultRespawnTime.BackColor = ColorBox.backGround;
-            comboxDefaultRespawnTime.ForeColor = Color.Chartreuse;
-            comboxDefaultDaytimeSpeed.BackColor = ColorBox.backGround;
-            comboxDefaultDaytimeSpeed.ForeColor = Color.Chartreuse;
-            comboxDefaultZoneDeathTime.BackColor = ColorBox.backGround;
-            comboxDefaultZoneDeathTime.ForeColor = Color.Chartreuse;
-            comboxDefaultPreRoundTime.BackColor = ColorBox.backGround;
-            comboxDefaultPreRoundTime.ForeColor = Color.Chartreuse;
-            comboxDefaultPostRoundTime.BackColor = ColorBox.backGround;
-            comboxDefaultPostRoundTime.ForeColor = Color.Chartreuse;
+        private void TextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (sender is TextBox textBox && _textBoxComboBoxMap.TryGetValue(textBox, out ComboBox comboBox))
+            {
+                UpdateLinkedDropdownValues(textBox, comboBox);
+            }
         }
 
         private void FillDropDownCollections()
         {
-            List<ComboBox> AllWeapons = new();
-            foreach (WeaponPanel weaponPanel in AllClassLoadOuts)
-            {
-                AllWeapons.AddRange(weaponPanel.GetAllWeaponDropDowns());
-            }
-            WeaponDropdownAll = AllWeapons.ToArray();
+            PrimaryAllLoadout = CollectWeaponDropdowns(weaponPanel => weaponPanel.GetPrimaryWeaponDropDowns(),
+                new List<ComboBox> { comboxFilterWeaponPrimaryAll }
+            );
+            SecondaryAllLoadout = CollectWeaponDropdowns(weaponPanel => weaponPanel.GetSecondaryWeaponDropDowns(),
+                new List<ComboBox> { comboxFilterWeaponSecondaryAll }
+            );
+            WeaponDropdownAll = CollectWeaponDropdowns(weaponPanel => weaponPanel.GetAllWeaponDropDowns());
+            Primary1Loadout = CollectWeaponDropdowns(weaponPanel => new[] { weaponPanel.GetFirstPrimaryWeaponDropDown() });
+            Primary2Loadout = CollectWeaponDropdowns(weaponPanel => new[] { weaponPanel.GetSecondPrimaryWeaponDropDown() });
+            Primary3Loadout = CollectWeaponDropdowns(weaponPanel => new[] { weaponPanel.GetFinalPrimaryWeaponDropDown() });
+            Secondary1Loadout = CollectWeaponDropdowns(weaponPanel => new[] { weaponPanel.GetFirstSecondaryWeaponDropdown() });
+            Secondary2Loadout = CollectWeaponDropdowns(weaponPanel => new[] { weaponPanel.GetUpgradedSecondaryWeaponDropdown() });
+            FiltersPrimary = new ComboBox[] { comboxFilterWeaponPrimary1, comboxFilterWeaponPrimary2, comboxFilterWeaponPrimary3 };
+            FiltersSecondary = new ComboBox[] { comboxFilterWeaponSecondary1, comboxFilterWeaponSecondary2 };
+        }
 
-            List<ComboBox> PrimaryWeapons = new() { comboxSingleWeaponPrimary };
-            foreach (WeaponPanel weaponPanel in AllClassLoadOuts)
-            {
-                PrimaryWeapons.AddRange(weaponPanel.GetPrimaryWeaponDropDowns());
-            }
-            WeaponDropDownPrimary = PrimaryWeapons.ToArray();
+        private ComboBox[] CollectWeaponDropdowns(Func<WeaponPanel, IEnumerable<ComboBox>> selector, List<ComboBox>? initialDropdowns = null)
+        {
+            // Initialize the list if not provided
+            initialDropdowns ??= new List<ComboBox>();
 
-            List<ComboBox> SecondaryWeapons = new() { comboxSingleWeaponSecondary };
             foreach (WeaponPanel weaponPanel in AllClassLoadOuts)
             {
-                SecondaryWeapons.AddRange(weaponPanel.GetSecondaryWeaponDropDowns());
+                initialDropdowns.AddRange(selector(weaponPanel));
             }
-            WeaponDropDownSecondary = SecondaryWeapons.ToArray();
+
+            return initialDropdowns.ToArray();
         }
 
         internal void AddWeaponPanel(WeaponPanel weaponPanel)
@@ -147,8 +140,13 @@ namespace ServerModGenerator
             {
                 combobox.SelectedIndex = 0;
             }
-            comboxSingleWeaponPrimary.SelectedIndex = 0;
-            comboxSingleWeaponSecondary.SelectedIndex = 0;
+            comboxFilterWeaponPrimaryAll.SelectedIndex = 0;
+            comboxFilterWeaponPrimary1.SelectedIndex = 0;
+            comboxFilterWeaponPrimary2.SelectedIndex = 0;
+            comboxFilterWeaponPrimary3.SelectedIndex = 0;
+            comboxFilterWeaponSecondaryAll.SelectedIndex = 0;
+            comboxFilterWeaponSecondary1.SelectedIndex = 0;
+            comboxFilterWeaponSecondary2.SelectedIndex = 0;
         }
 
         private bool IsAnyWeaponReplaced()
@@ -188,37 +186,58 @@ namespace ServerModGenerator
             }
         }
 
-        private void comboxSingleWeaponPrimary_SelectedIndexChanged(object sender, EventArgs e)
+        private void comboxFilterWeaponPrimaryAll_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!comboxSingleWeaponPrimary.Text.StartsWith("-"))
+            HandleSingleWeaponIndexChanged(comboxFilterWeaponPrimaryAll, FiltersPrimary);
+        }
+
+        private void comboxFilterWeaponPrimary1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            HandleSingleWeaponIndexChanged(comboxFilterWeaponPrimary1, Primary1Loadout);
+        }
+
+        private void comboxFilterWeaponPrimary2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            HandleSingleWeaponIndexChanged(comboxFilterWeaponPrimary2, Primary2Loadout);
+        }
+
+        private void comboxFilterWeaponPrimary3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            HandleSingleWeaponIndexChanged(comboxFilterWeaponPrimary3, Primary3Loadout);
+        }
+
+        private void comboxFilterWeaponSecondaryAll_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            HandleSingleWeaponIndexChanged(comboxFilterWeaponSecondaryAll, FiltersSecondary);
+        }
+
+        private void comboxFilterWeaponSecondary1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            HandleSingleWeaponIndexChanged(comboxFilterWeaponSecondary1, Secondary1Loadout);
+        }
+
+        private void comboxFilterWeaponSecondary2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            HandleSingleWeaponIndexChanged(comboxFilterWeaponSecondary2, Secondary2Loadout);
+        }
+
+        private void HandleSingleWeaponIndexChanged(ComboBox sourceSingleWeaponDropdown, ComboBox[] collectionWeaponDropdowns)
+        {
+            if (!sourceSingleWeaponDropdown.Text.StartsWith("-"))
             {
-                if (!comboxSingleWeaponPrimary.Text.StartsWith("="))
+                if (!sourceSingleWeaponDropdown.Text.StartsWith("="))
                 {
-                    foreach (ComboBox combobox in WeaponDropDownPrimary)
+                    foreach (ComboBox combobox in collectionWeaponDropdowns)
                     {
-                        if (combobox.Text != comboxSingleWeaponPrimary.Text)
+                        if (combobox.Text != sourceSingleWeaponDropdown.Text)
                         {
-                            combobox.SelectedIndex = combobox.Items.IndexOf(comboxSingleWeaponPrimary.Text);
+                            combobox.SelectedIndex = combobox.Items.IndexOf(sourceSingleWeaponDropdown.Text);
                         }
                     }
                 }
                 else
                 {
-                    comboxSingleWeaponPrimary.SelectedIndex = CachedDropDownIndex;
-                }
-            }
-        }
-
-        private void comboxSingleWeaponSecondary_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (!comboxSingleWeaponSecondary.Text.StartsWith("-"))
-            {
-                foreach (ComboBox combobox in WeaponDropDownSecondary)
-                {
-                    if (combobox.Text != comboxSingleWeaponSecondary.Text)
-                    {
-                        combobox.SelectedIndex = combobox.Items.IndexOf(comboxSingleWeaponSecondary.Text);
-                    }
+                    sourceSingleWeaponDropdown.SelectedIndex = CachedDropDownIndex;
                 }
             }
         }
@@ -347,20 +366,32 @@ namespace ServerModGenerator
             {
                 combobox.DropDownClosed += UnselectText;
                 combobox.KeyDown += PreventKey;
-                //combobox.ContextMenu = new ContextMenu();
             }
-            comboxSingleWeaponPrimary.DropDownClosed += UnselectText;
-            comboxSingleWeaponPrimary.KeyDown += PreventKey;
-            //comboxSingleWeaponPrimary.ContextMenu = new ContextMenu();
-            comboxSingleWeaponSecondary.DropDownClosed += UnselectText;
-            comboxSingleWeaponSecondary.KeyDown += PreventKey;
-            //comboxSingleWeaponSecondary.ContextMenu = new ContextMenu();
+            comboxFilterWeaponPrimaryAll.DropDownClosed += UnselectText;
+            comboxFilterWeaponPrimaryAll.KeyDown += PreventKey;
+            comboxFilterWeaponPrimary1.DropDownClosed += UnselectText;
+            comboxFilterWeaponPrimary1.KeyDown += PreventKey;
+            comboxFilterWeaponPrimary2.DropDownClosed += UnselectText;
+            comboxFilterWeaponPrimary2.KeyDown += PreventKey;
+            comboxFilterWeaponPrimary3.DropDownClosed += UnselectText;
+            comboxFilterWeaponPrimary3.KeyDown += PreventKey;
+            comboxFilterWeaponSecondaryAll.DropDownClosed += UnselectText;
+            comboxFilterWeaponSecondaryAll.KeyDown += PreventKey;
+            comboxFilterWeaponSecondary1.DropDownClosed += UnselectText;
+            comboxFilterWeaponSecondary1.KeyDown += PreventKey;
+            comboxFilterWeaponSecondary2.DropDownClosed += UnselectText;
+            comboxFilterWeaponSecondary2.KeyDown += PreventKey;
         }
 
         internal void AddGeneratedMods()
         {
             comboxModCollection.Items.Add("[None Selected]");
-            // ..
+
+            if (Strings.PatchExportPath == "")
+            {
+                return;
+            }
+
             DirectoryInfo dir = new(Strings.PatchExportPath);
             foreach (DirectoryInfo subDir in dir.GetDirectories())
             {
@@ -368,8 +399,6 @@ namespace ServerModGenerator
                 {
                     if (file.Name.EndsWith(".dat") || file.Name.EndsWith(".fat") || (file.Name.Contains("ServerLauncher") && file.Name.EndsWith(".exe")))
                     {
-                        // Add subdir to dropdown
-                        // ..
                         comboxModCollection.Items.Add(subDir.Name);
                         break;
                     }
@@ -481,175 +510,70 @@ namespace ServerModGenerator
             MessageBox.Show("Postround Time:\r\nAdd values (in sec) of time after a match ended, showing score details.\r\nWARNING: Setting it to 0 will make it infinite waiting!\r\n\r\nGame Default: 25", Strings.MsgBox_TitleInfo);
         }
 
-        private void tbRespawnTimes_TextChanged(object sender, EventArgs e)
+        private void UpdateLinkedDropdownValues(TextBox modeScoreCollection, ComboBox defaultScore)
         {
-            comboxDefaultRespawnTime.Items.Clear();
+            defaultScore.Items.Clear();
+            defaultScore.Text = string.Empty;
 
-            if (tbRespawnTimes.Text.Length == 0)
+            if (modeScoreCollection.Text.Length == 0)
             {
                 return;
             }
-            if (tbRespawnTimes.Text.Contains(';'))
+            if (modeScoreCollection.Text.Contains(';'))
             {
-                string[] values = tbRespawnTimes.Text.Split(';');
+                string[] values = modeScoreCollection.Text.Split(';');
                 foreach (string value in values)
                 {
                     if (value != "")
                     {
-                        comboxDefaultRespawnTime.Items.Add(value);
+                        defaultScore.Items.Add(value);
                     }
                 }
-                comboxDefaultRespawnTime.SelectedIndex = 0;
+                defaultScore.SelectedIndex = 0;
             }
             else
             {
-                comboxDefaultRespawnTime.Items.Add(tbRespawnTimes.Text);
-                comboxDefaultRespawnTime.SelectedIndex = 0;
+                defaultScore.Items.Add(modeScoreCollection.Text);
+                defaultScore.SelectedIndex = 0;
             }
         }
 
-        private void tbSpawnShields_TextChanged(object sender, EventArgs e)
-        {
-            comboxDefaultSpawnShield.Items.Clear();
+        //private void KeyDownPreventChars(object sender, KeyEventArgs e)
+        //{
+        //    if (!(e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9) && !(e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9) && e.KeyCode != Keys.OemSemicolon && e.KeyCode != Keys.Back && e.KeyCode != Keys.Left && e.KeyCode != Keys.Right && e.KeyCode != Keys.Home && e.KeyCode != Keys.End)
+        //    {
+        //        e.SuppressKeyPress = true;
+        //    }
+        //}
 
-            if (tbSpawnShields.Text.Length == 0)
+        private void KeyPressPreventChars(object sender, KeyPressEventArgs e)
+        {
+            // Check if the key pressed is a digit or a semicolon
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != ';' && e.KeyChar != (char)Keys.Back)
             {
-                return;
+                e.Handled = true; // Prevent the character from being entered
             }
-            if (tbSpawnShields.Text.Contains(';'))
+        }
+
+        private void TextChangedValidateInput(object sender, EventArgs e)
+        {
+            if (sender is TextBox textBox)
             {
-                string[] values = tbSpawnShields.Text.Split(';');
-                foreach (string value in values)
+                // Retain only digits and semicolons
+                string validText = new(textBox.Text.Where(c => char.IsDigit(c) || c == ';').ToArray());
+
+                // If there's any invalid character, update the text
+                if (textBox.Text != validText)
                 {
-                    if (value != "")
-                    {
-                        comboxDefaultSpawnShield.Items.Add(value);
-                    }
+                    textBox.Text = validText;
+
+                    // Move the cursor to the end of the text
+                    textBox.SelectionStart = textBox.Text.Length;
                 }
-                comboxDefaultSpawnShield.SelectedIndex = 0;
-            }
-            else
-            {
-                comboxDefaultSpawnShield.Items.Add(tbSpawnShields.Text);
-                comboxDefaultSpawnShield.SelectedIndex = 0;
             }
         }
 
-        private void tbDaytimeSpeed_TextChanged(object sender, EventArgs e)
-        {
-            comboxDefaultDaytimeSpeed.Items.Clear();
 
-            if (tbDaytimeSpeed.Text.Length == 0)
-            {
-                return;
-            }
-            if (tbDaytimeSpeed.Text.Contains(';'))
-            {
-                string[] values = tbDaytimeSpeed.Text.Split(';');
-                foreach (string value in values)
-                {
-                    if (value != "")
-                    {
-                        comboxDefaultDaytimeSpeed.Items.Add(value);
-                    }
-                }
-                comboxDefaultDaytimeSpeed.SelectedIndex = 0;
-            }
-            else
-            {
-                comboxDefaultDaytimeSpeed.Items.Add(tbDaytimeSpeed.Text);
-                comboxDefaultDaytimeSpeed.SelectedIndex = 0;
-            }
-        }
-
-        private void tbZoneDeathTimes_TextChanged(object sender, EventArgs e)
-        {
-            comboxDefaultZoneDeathTime.Items.Clear();
-
-            if (tbZoneDeathTimes.Text.Length == 0)
-            {
-                return;
-            }
-            if (tbZoneDeathTimes.Text.Contains(';'))
-            {
-                string[] values = tbZoneDeathTimes.Text.Split(';');
-                foreach (string value in values)
-                {
-                    if (value != "")
-                    {
-                        comboxDefaultZoneDeathTime.Items.Add(value);
-                    }
-                }
-                comboxDefaultZoneDeathTime.SelectedIndex = 0;
-            }
-            else
-            {
-                comboxDefaultZoneDeathTime.Items.Add(tbZoneDeathTimes.Text);
-                comboxDefaultZoneDeathTime.SelectedIndex = 0;
-            }
-        }
-
-        private void tbPreRoundTimes_TextChanged(object sender, EventArgs e)
-        {
-            comboxDefaultPreRoundTime.Items.Clear();
-
-            if (tbPreRoundTimes.Text.Length == 0)
-            {
-                return;
-            }
-            if (tbPreRoundTimes.Text.Contains(';'))
-            {
-                string[] values = tbPreRoundTimes.Text.Split(';');
-                foreach (string value in values)
-                {
-                    if (value != "")
-                    {
-                        comboxDefaultPreRoundTime.Items.Add(value);
-                    }
-                }
-                comboxDefaultPreRoundTime.SelectedIndex = 0;
-            }
-            else
-            {
-                comboxDefaultPreRoundTime.Items.Add(tbPreRoundTimes.Text);
-                comboxDefaultPreRoundTime.SelectedIndex = 0;
-            }
-        }
-
-        private void tbPostRoundTimes_TextChanged(object sender, EventArgs e)
-        {
-            comboxDefaultPostRoundTime.Items.Clear();
-
-            if (tbPostRoundTimes.Text.Length == 0)
-            {
-                return;
-            }
-            if (tbPostRoundTimes.Text.Contains(';'))
-            {
-                string[] values = tbPostRoundTimes.Text.Split(';');
-                foreach (string value in values)
-                {
-                    if (value != "")
-                    {
-                        comboxDefaultPostRoundTime.Items.Add(value);
-                    }
-                }
-                comboxDefaultPostRoundTime.SelectedIndex = 0;
-            }
-            else
-            {
-                comboxDefaultPostRoundTime.Items.Add(tbPostRoundTimes.Text);
-                comboxDefaultPostRoundTime.SelectedIndex = 0;
-            }
-        }
-
-        private void KeyDownPreventChars(object sender, KeyEventArgs e)
-        {
-            if (!(e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9) && !(e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9) && e.KeyCode != Keys.OemSemicolon && e.KeyCode != Keys.Back && e.KeyCode != Keys.Left && e.KeyCode != Keys.Right && e.KeyCode != Keys.Home && e.KeyCode != Keys.End)
-            {
-                e.SuppressKeyPress = true;
-            }
-        }
 
         public string GetRespawnTimeCollection()
         {
@@ -727,6 +651,82 @@ namespace ServerModGenerator
             }
         }
 
+        public string GetScoresDMCollection()
+        {
+            return tbScoresDM.Text;
+        }
+
+        public string GetScoresDMDefaultValue()
+        {
+            return comboxDefaultScoreDM.Text;
+        }
+
+        public void SetScoresDMCollection(string collection, string defaultValue)
+        {
+            tbScoresDM.Text = collection;
+            if (comboxDefaultScoreDM.Items.Contains(defaultValue))
+            {
+                comboxDefaultScoreDM.SelectedIndex = comboxDefaultScoreDM.Items.IndexOf(defaultValue);
+            }
+        }
+
+        public string GetScoresTDMCollection()
+        {
+            return tbScoresTDM.Text;
+        }
+
+        public string GetScoresTDMDefaultValue()
+        {
+            return comboxDefaultScoreTDM.Text;
+        }
+
+        public void SetScoresTDMCollection(string collection, string defaultValue)
+        {
+            tbScoresTDM.Text = collection;
+            if (comboxDefaultScoreTDM.Items.Contains(defaultValue))
+            {
+                comboxDefaultScoreTDM.SelectedIndex = comboxDefaultScoreTDM.Items.IndexOf(defaultValue);
+            }
+        }
+
+        public string GetScoresCTDCollection()
+        {
+            return tbScoresCTD.Text;
+        }
+
+        public string GetScoresCTDDefaultValue()
+        {
+            return comboxDefaultScoreCTD.Text;
+        }
+
+        public void SetScoresCTDCollection(string collection, string defaultValue)
+        {
+            tbScoresCTD.Text = collection;
+            if (comboxDefaultScoreCTD.Items.Contains(defaultValue))
+            {
+                comboxDefaultScoreCTD.SelectedIndex = comboxDefaultScoreCTD.Items.IndexOf(defaultValue);
+            }
+        }
+
+        public string GetScoresUPRCollection()
+        {
+            return tbScoresUPR.Text;
+        }
+
+        public string GetScoresUPRDefaultValue()
+        {
+            return comboxDefaultScoreUPR.Text;
+        }
+
+        public void SetScoresUPRCollection(string collection, string defaultValue)
+        {
+            tbScoresUPR.Text = collection;
+            if (comboxDefaultScoreUPR.Items.Contains(defaultValue))
+            {
+                comboxDefaultScoreUPR.SelectedIndex = comboxDefaultScoreUPR.Items.IndexOf(defaultValue);
+            }
+        }
+
         public string GetPreRoundTimeCollection()
         {
             return tbPreRoundTimes.Text;
@@ -791,6 +791,14 @@ namespace ServerModGenerator
             }
         }
 
+        private void pbOpenGameBinFolder_Click(object sender, EventArgs e)
+        {
+            if (Directory.Exists(Strings.GameFolderPath + "\\bin"))
+            {
+                Process.Start("explorer.exe", Strings.GameFolderPath + "\\bin");
+            }
+        }
+
         private void comboxModCollection_SelectedIndexChanged(object sender, EventArgs e)
         {
             bLoadReport.Enabled = false;
@@ -817,7 +825,27 @@ namespace ServerModGenerator
 
         private void bLoadReport_Click(object sender, EventArgs e)
         {
+            ResetGeneratorGUI();
+            tbOutputName.Text = comboxModCollection.Text;
             reportManager.loader.LoadReport(Strings.PatchExportPath + "\\" + comboxModCollection.Text + "\\" + Strings.ReportFileName);
+        }
+
+        internal void ResetGeneratorGUI()
+        {
+            SetDefaultDropDownIndex();
+            tbDayTimeValues.Clear();
+            tbDayTimeNames.Clear();
+            tbDaytimeSpeed.Clear();
+            tbRespawnTimes.Clear();
+            tbSpawnShields.Clear();
+            tbZoneDeathTimes.Clear();
+            tbScoresDM.Clear();
+            tbScoresTDM.Clear();
+            tbScoresCTD.Clear();
+            tbScoresUPR.Clear();
+            tbPreRoundTimes.Clear();
+            tbPostRoundTimes.Clear();
+            fc2slpanel.ResetFields();
         }
 
         private void bInstall_Click(object sender, EventArgs e)
@@ -843,6 +871,7 @@ namespace ServerModGenerator
                         }
                         else
                         {
+                            // Could crash SMG if process still running when FSLM crashed.
                             File.Copy(file.FullName, Strings.GameFolderPath + "\\bin\\" + file.Name, true);
                         }
                     }
@@ -853,6 +882,21 @@ namespace ServerModGenerator
         private void lDiscordLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start(new ProcessStartInfo(((LinkLabel)sender).Text) { UseShellExecute = true });
+        }
+
+        private void bAddDefaultScoresDM_Click(object sender, EventArgs e)
+        {
+            tbScoresDM.Text = "0;5;10;15;20;25;30;40;50;100";
+        }
+
+        private void bAddDefaultScoresTDM_Click(object sender, EventArgs e)
+        {
+            tbScoresTDM.Text = "0;5;10;15;20;25;30;40;50;100;200";
+        }
+
+        private void bAddDefaultScoresCTD_Click(object sender, EventArgs e)
+        {
+            tbScoresCTD.Text = "0;3;5;10;20;30;40;50;100";
         }
     }
 }

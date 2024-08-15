@@ -4,7 +4,7 @@ namespace ServerModGenerator
 {
     public static class Strings
     {
-        public static string SMG_Version { get { return "v20230606"; } }
+        public static string SMG_Version { get { return "v20240812"; } }
 
         public static string MsgBox_TitleInfo { get { return "Setting Info"; } }
 

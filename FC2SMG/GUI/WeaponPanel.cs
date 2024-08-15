@@ -49,17 +49,32 @@ namespace ServerModGenerator.GUI
             return PrimaryWeaponDropdowns;
         }
 
+        internal ComboBox GetFirstPrimaryWeaponDropDown()
+        {
+            return PrimaryWeaponDropdowns[0];
+        }
+
+        internal ComboBox GetSecondPrimaryWeaponDropDown()
+        {
+            return PrimaryWeaponDropdowns[1];
+        }
+
+        internal ComboBox GetFinalPrimaryWeaponDropDown()
+        {
+            return PrimaryWeaponDropdowns[2];
+        }
+
         internal ComboBox[] GetSecondaryWeaponDropDowns()
         {
             return SecondaryWeaponDropdowns;
         }
 
-        internal ComboBox GetFirstSecondaryWeapon()
+        internal ComboBox GetFirstSecondaryWeaponDropdown()
         {
             return SecondaryWeaponDropdowns[0];
         }
 
-        internal ComboBox GetUpgradedSecondaryWeapon()
+        internal ComboBox GetUpgradedSecondaryWeaponDropdown()
         {
             return SecondaryWeaponDropdowns[1];
         }

@@ -28,139 +28,138 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.pMain = new System.Windows.Forms.Panel();
-            this.lLoadoutPrimary = new System.Windows.Forms.Label();
-            this.lLoadoutSecondary = new System.Windows.Forms.Label();
-            this.comboxPrimary1 = new System.Windows.Forms.ComboBox();
-            this.comboxPrimary2 = new System.Windows.Forms.ComboBox();
-            this.comboxPrimary3 = new System.Windows.Forms.ComboBox();
-            this.comboxSecondary1 = new System.Windows.Forms.ComboBox();
-            this.comboxSecondary2 = new System.Windows.Forms.ComboBox();
-            this.lClassName = new System.Windows.Forms.Label();
-            this.pMain.SuspendLayout();
-            this.SuspendLayout();
+            pMain = new Panel();
+            lLoadoutPrimary = new Label();
+            lLoadoutSecondary = new Label();
+            comboxPrimary1 = new ComboBox();
+            comboxPrimary2 = new ComboBox();
+            comboxPrimary3 = new ComboBox();
+            comboxSecondary1 = new ComboBox();
+            comboxSecondary2 = new ComboBox();
+            lClassName = new Label();
+            pMain.SuspendLayout();
+            SuspendLayout();
             // 
             // pMain
             // 
-            this.pMain.Controls.Add(this.lLoadoutPrimary);
-            this.pMain.Controls.Add(this.lLoadoutSecondary);
-            this.pMain.Controls.Add(this.comboxPrimary1);
-            this.pMain.Controls.Add(this.comboxPrimary2);
-            this.pMain.Controls.Add(this.comboxPrimary3);
-            this.pMain.Controls.Add(this.comboxSecondary1);
-            this.pMain.Controls.Add(this.comboxSecondary2);
-            this.pMain.Controls.Add(this.lClassName);
-            this.pMain.Location = new System.Drawing.Point(0, 0);
-            this.pMain.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.pMain.Name = "pMain";
-            this.pMain.Size = new System.Drawing.Size(310, 137);
-            this.pMain.TabIndex = 17;
+            pMain.Controls.Add(lLoadoutPrimary);
+            pMain.Controls.Add(lLoadoutSecondary);
+            pMain.Controls.Add(comboxPrimary1);
+            pMain.Controls.Add(comboxPrimary2);
+            pMain.Controls.Add(comboxPrimary3);
+            pMain.Controls.Add(comboxSecondary1);
+            pMain.Controls.Add(comboxSecondary2);
+            pMain.Controls.Add(lClassName);
+            pMain.Location = new Point(0, 0);
+            pMain.Margin = new Padding(4, 3, 4, 3);
+            pMain.Name = "pMain";
+            pMain.Size = new Size(350, 137);
+            pMain.TabIndex = 17;
             // 
             // lLoadoutPrimary
             // 
-            this.lLoadoutPrimary.AutoSize = true;
-            this.lLoadoutPrimary.Font = new System.Drawing.Font("Malgun Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lLoadoutPrimary.Location = new System.Drawing.Point(4, 18);
-            this.lLoadoutPrimary.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lLoadoutPrimary.Name = "lLoadoutPrimary";
-            this.lLoadoutPrimary.Size = new System.Drawing.Size(52, 17);
-            this.lLoadoutPrimary.TabIndex = 1;
-            this.lLoadoutPrimary.Text = "Primary";
+            lLoadoutPrimary.AutoSize = true;
+            lLoadoutPrimary.Font = new Font("Malgun Gothic", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            lLoadoutPrimary.Location = new Point(4, 18);
+            lLoadoutPrimary.Margin = new Padding(4, 0, 4, 0);
+            lLoadoutPrimary.Name = "lLoadoutPrimary";
+            lLoadoutPrimary.Size = new Size(52, 17);
+            lLoadoutPrimary.TabIndex = 1;
+            lLoadoutPrimary.Text = "Primary";
             // 
             // lLoadoutSecondary
             // 
-            this.lLoadoutSecondary.AutoSize = true;
-            this.lLoadoutSecondary.Font = new System.Drawing.Font("Malgun Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lLoadoutSecondary.Location = new System.Drawing.Point(155, 18);
-            this.lLoadoutSecondary.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lLoadoutSecondary.Name = "lLoadoutSecondary";
-            this.lLoadoutSecondary.Size = new System.Drawing.Size(70, 17);
-            this.lLoadoutSecondary.TabIndex = 2;
-            this.lLoadoutSecondary.Text = "Secondary";
+            lLoadoutSecondary.AutoSize = true;
+            lLoadoutSecondary.Font = new Font("Malgun Gothic", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            lLoadoutSecondary.Location = new Point(178, 18);
+            lLoadoutSecondary.Margin = new Padding(4, 0, 4, 0);
+            lLoadoutSecondary.Name = "lLoadoutSecondary";
+            lLoadoutSecondary.Size = new Size(70, 17);
+            lLoadoutSecondary.TabIndex = 2;
+            lLoadoutSecondary.Text = "Secondary";
             // 
             // comboxPrimary1
             // 
-            this.comboxPrimary1.Font = new System.Drawing.Font("Nirmala UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.comboxPrimary1.FormattingEnabled = true;
-            this.comboxPrimary1.Location = new System.Drawing.Point(8, 40);
-            this.comboxPrimary1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.comboxPrimary1.Name = "comboxPrimary1";
-            this.comboxPrimary1.Size = new System.Drawing.Size(142, 21);
-            this.comboxPrimary1.TabIndex = 3;
-            this.comboxPrimary1.SelectedIndexChanged += new System.EventHandler(this.ComboBox_IndexChanged);
-            this.comboxPrimary1.Click += new System.EventHandler(this.CacheCurrentIndex);
+            comboxPrimary1.Font = new Font("Nirmala UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            comboxPrimary1.FormattingEnabled = true;
+            comboxPrimary1.Location = new Point(8, 40);
+            comboxPrimary1.Margin = new Padding(4, 3, 4, 3);
+            comboxPrimary1.Name = "comboxPrimary1";
+            comboxPrimary1.Size = new Size(165, 21);
+            comboxPrimary1.TabIndex = 3;
+            comboxPrimary1.SelectedIndexChanged += ComboBox_IndexChanged;
+            comboxPrimary1.Click += CacheCurrentIndex;
             // 
             // comboxPrimary2
             // 
-            this.comboxPrimary2.Font = new System.Drawing.Font("Nirmala UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.comboxPrimary2.FormattingEnabled = true;
-            this.comboxPrimary2.Location = new System.Drawing.Point(8, 71);
-            this.comboxPrimary2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.comboxPrimary2.Name = "comboxPrimary2";
-            this.comboxPrimary2.Size = new System.Drawing.Size(142, 21);
-            this.comboxPrimary2.TabIndex = 4;
-            this.comboxPrimary2.SelectedIndexChanged += new System.EventHandler(this.ComboBox_IndexChanged);
-            this.comboxPrimary2.Click += new System.EventHandler(this.CacheCurrentIndex);
+            comboxPrimary2.Font = new Font("Nirmala UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            comboxPrimary2.FormattingEnabled = true;
+            comboxPrimary2.Location = new Point(8, 71);
+            comboxPrimary2.Margin = new Padding(4, 3, 4, 3);
+            comboxPrimary2.Name = "comboxPrimary2";
+            comboxPrimary2.Size = new Size(165, 21);
+            comboxPrimary2.TabIndex = 4;
+            comboxPrimary2.SelectedIndexChanged += ComboBox_IndexChanged;
+            comboxPrimary2.Click += CacheCurrentIndex;
             // 
             // comboxPrimary3
             // 
-            this.comboxPrimary3.Font = new System.Drawing.Font("Nirmala UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.comboxPrimary3.FormattingEnabled = true;
-            this.comboxPrimary3.Location = new System.Drawing.Point(8, 103);
-            this.comboxPrimary3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.comboxPrimary3.Name = "comboxPrimary3";
-            this.comboxPrimary3.Size = new System.Drawing.Size(142, 21);
-            this.comboxPrimary3.TabIndex = 5;
-            this.comboxPrimary3.SelectedIndexChanged += new System.EventHandler(this.ComboBox_IndexChanged);
-            this.comboxPrimary3.Click += new System.EventHandler(this.CacheCurrentIndex);
+            comboxPrimary3.Font = new Font("Nirmala UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            comboxPrimary3.FormattingEnabled = true;
+            comboxPrimary3.Location = new Point(8, 103);
+            comboxPrimary3.Margin = new Padding(4, 3, 4, 3);
+            comboxPrimary3.Name = "comboxPrimary3";
+            comboxPrimary3.Size = new Size(165, 21);
+            comboxPrimary3.TabIndex = 5;
+            comboxPrimary3.SelectedIndexChanged += ComboBox_IndexChanged;
+            comboxPrimary3.Click += CacheCurrentIndex;
             // 
             // comboxSecondary1
             // 
-            this.comboxSecondary1.Font = new System.Drawing.Font("Nirmala UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.comboxSecondary1.FormattingEnabled = true;
-            this.comboxSecondary1.Location = new System.Drawing.Point(158, 40);
-            this.comboxSecondary1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.comboxSecondary1.Name = "comboxSecondary1";
-            this.comboxSecondary1.Size = new System.Drawing.Size(142, 21);
-            this.comboxSecondary1.TabIndex = 6;
-            this.comboxSecondary1.SelectedIndexChanged += new System.EventHandler(this.ComboBox_IndexChanged);
-            this.comboxSecondary1.Click += new System.EventHandler(this.CacheCurrentIndex);
+            comboxSecondary1.Font = new Font("Nirmala UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            comboxSecondary1.FormattingEnabled = true;
+            comboxSecondary1.Location = new Point(181, 40);
+            comboxSecondary1.Margin = new Padding(4, 3, 4, 3);
+            comboxSecondary1.Name = "comboxSecondary1";
+            comboxSecondary1.Size = new Size(165, 21);
+            comboxSecondary1.TabIndex = 6;
+            comboxSecondary1.SelectedIndexChanged += ComboBox_IndexChanged;
+            comboxSecondary1.Click += CacheCurrentIndex;
             // 
             // comboxSecondary2
             // 
-            this.comboxSecondary2.Font = new System.Drawing.Font("Nirmala UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.comboxSecondary2.FormattingEnabled = true;
-            this.comboxSecondary2.Location = new System.Drawing.Point(158, 71);
-            this.comboxSecondary2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.comboxSecondary2.Name = "comboxSecondary2";
-            this.comboxSecondary2.Size = new System.Drawing.Size(142, 21);
-            this.comboxSecondary2.TabIndex = 7;
-            this.comboxSecondary2.SelectedIndexChanged += new System.EventHandler(this.ComboBox_IndexChanged);
-            this.comboxSecondary2.Click += new System.EventHandler(this.CacheCurrentIndex);
+            comboxSecondary2.Font = new Font("Nirmala UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            comboxSecondary2.FormattingEnabled = true;
+            comboxSecondary2.Location = new Point(181, 71);
+            comboxSecondary2.Margin = new Padding(4, 3, 4, 3);
+            comboxSecondary2.Name = "comboxSecondary2";
+            comboxSecondary2.Size = new Size(165, 21);
+            comboxSecondary2.TabIndex = 7;
+            comboxSecondary2.SelectedIndexChanged += ComboBox_IndexChanged;
+            comboxSecondary2.Click += CacheCurrentIndex;
             // 
             // lClassName
             // 
-            this.lClassName.AutoSize = true;
-            this.lClassName.Font = new System.Drawing.Font("Malgun Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lClassName.Location = new System.Drawing.Point(3, -3);
-            this.lClassName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lClassName.Name = "lClassName";
-            this.lClassName.Size = new System.Drawing.Size(93, 21);
-            this.lClassName.TabIndex = 0;
-            this.lClassName.Text = "ClassName";
+            lClassName.AutoSize = true;
+            lClassName.Font = new Font("Malgun Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            lClassName.Location = new Point(3, -3);
+            lClassName.Margin = new Padding(4, 0, 4, 0);
+            lClassName.Name = "lClassName";
+            lClassName.Size = new Size(93, 21);
+            lClassName.TabIndex = 0;
+            lClassName.Text = "ClassName";
             // 
             // WeaponPanel
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.pMain);
-            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.Name = "WeaponPanel";
-            this.Size = new System.Drawing.Size(315, 144);
-            this.pMain.ResumeLayout(false);
-            this.pMain.PerformLayout();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(pMain);
+            Margin = new Padding(4, 3, 4, 3);
+            Name = "WeaponPanel";
+            Size = new Size(355, 140);
+            pMain.ResumeLayout(false);
+            pMain.PerformLayout();
+            ResumeLayout(false);
         }
 
         #endregion

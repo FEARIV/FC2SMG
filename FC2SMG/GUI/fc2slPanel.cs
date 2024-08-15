@@ -126,6 +126,12 @@ namespace FC2SMG.GUI
             tbPatchName.Text = value;
         }
 
+        internal void ResetFields()
+        {
+            tbHostName.ResetText();
+            tbPatchName.ResetText();
+        }
+
         private void cbHiddenUbiMaps_CheckedChanged(object sender, EventArgs e)
         {
             if (cbHiddenUbiMaps.Checked)

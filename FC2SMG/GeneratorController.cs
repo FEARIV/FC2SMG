@@ -8,7 +8,7 @@ namespace ServerModGenerator
         private GeneratorGUI Generatorgui;
         int rowIndex = 0;
         int ColumnIndex = 0;
-        readonly int WeaponPanelWidth = 310;
+        readonly int WeaponPanelWidth = 355;
         readonly int WeaponPanelHeight = 137;
         readonly int spaceBetweenPanels = 5;
 
@@ -83,20 +83,20 @@ namespace ServerModGenerator
             saboteur.Location = GetLocationForPlacement();
             Generatorgui.AddWeaponPanel(saboteur);
 
-            linkedComboBoxesBomb[0] = shotgun.GetUpgradedSecondaryWeapon();
-            linkedComboBoxesBomb[1] = saboteur.GetUpgradedSecondaryWeapon();
-            shotgun.GetUpgradedSecondaryWeapon().SelectedIndexChanged += new(comboxUpgradedSecondaryWeapon_SelectedIndexChanged);
-            saboteur.GetUpgradedSecondaryWeapon().SelectedIndexChanged += new(comboxUpgradedSecondaryWeapon_SelectedIndexChanged);
+            linkedComboBoxesBomb[0] = shotgun.GetUpgradedSecondaryWeaponDropdown();
+            linkedComboBoxesBomb[1] = saboteur.GetUpgradedSecondaryWeaponDropdown();
+            shotgun.GetUpgradedSecondaryWeaponDropdown().SelectedIndexChanged += new(comboxUpgradedSecondaryWeapon_SelectedIndexChanged);
+            saboteur.GetUpgradedSecondaryWeaponDropdown().SelectedIndexChanged += new(comboxUpgradedSecondaryWeapon_SelectedIndexChanged);
 
-            linkedComboBoxesPistol[0] = sniper.GetFirstSecondaryWeapon();
-            linkedComboBoxesPistol[1] = rebel.GetFirstSecondaryWeapon();
-            sniper.GetFirstSecondaryWeapon().SelectedIndexChanged += new(comboxFirstSecondaryWeapon_SelectedIndexChanged);
-            rebel.GetFirstSecondaryWeapon().SelectedIndexChanged += new(comboxFirstSecondaryWeapon_SelectedIndexChanged);
+            linkedComboBoxesPistol[0] = sniper.GetFirstSecondaryWeaponDropdown();
+            linkedComboBoxesPistol[1] = rebel.GetFirstSecondaryWeaponDropdown();
+            sniper.GetFirstSecondaryWeaponDropdown().SelectedIndexChanged += new(comboxFirstSecondaryWeapon_SelectedIndexChanged);
+            rebel.GetFirstSecondaryWeaponDropdown().SelectedIndexChanged += new(comboxFirstSecondaryWeapon_SelectedIndexChanged);
 
-            linkedComboBoxesMAC[0] = shotgun.GetFirstSecondaryWeapon();
-            linkedComboBoxesMAC[1] = gunner.GetUpgradedSecondaryWeapon();
-            shotgun.GetFirstSecondaryWeapon().SelectedIndexChanged += new(comboxMixedSecondaryWeapon_SelectedIndexChanged);
-            gunner.GetUpgradedSecondaryWeapon().SelectedIndexChanged += new(comboxMixedSecondaryWeapon_SelectedIndexChanged);
+            linkedComboBoxesMAC[0] = shotgun.GetFirstSecondaryWeaponDropdown();
+            linkedComboBoxesMAC[1] = gunner.GetUpgradedSecondaryWeaponDropdown();
+            shotgun.GetFirstSecondaryWeaponDropdown().SelectedIndexChanged += new(comboxMixedSecondaryWeapon_SelectedIndexChanged);
+            gunner.GetUpgradedSecondaryWeaponDropdown().SelectedIndexChanged += new(comboxMixedSecondaryWeapon_SelectedIndexChanged);
 
             //IncreaseColumnIndex();
             //WeaponPanel fake = new();
@@ -112,40 +112,28 @@ namespace ServerModGenerator
 
         private void comboxUpgradedSecondaryWeapon_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ComboBox weaponBox = (ComboBox)sender;
-            if (weaponBox == linkedComboBoxesBomb[0])
-            {
-                linkedComboBoxesBomb[1].SelectedIndex = weaponBox.SelectedIndex;
-            }
-            else if (weaponBox == linkedComboBoxesBomb[1])
-            {
-                linkedComboBoxesBomb[0].SelectedIndex = weaponBox.SelectedIndex;
-            }
+            UpdateLinkedDropdownWithSameWeapon((ComboBox)sender, linkedComboBoxesBomb);
         }
 
         private void comboxFirstSecondaryWeapon_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ComboBox weaponBox = (ComboBox)sender;
-            if (weaponBox == linkedComboBoxesPistol[0])
-            {
-                linkedComboBoxesPistol[1].SelectedIndex = weaponBox.SelectedIndex;
-            }
-            else if (weaponBox == linkedComboBoxesPistol[1])
-            {
-                linkedComboBoxesPistol[0].SelectedIndex = weaponBox.SelectedIndex;
-            }
+            UpdateLinkedDropdownWithSameWeapon((ComboBox)sender, linkedComboBoxesPistol);
         }
 
         private void comboxMixedSecondaryWeapon_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ComboBox weaponBox = (ComboBox)sender;
-            if (weaponBox == linkedComboBoxesMAC[0])
+            UpdateLinkedDropdownWithSameWeapon((ComboBox)sender, linkedComboBoxesMAC);
+        }
+
+        private void UpdateLinkedDropdownWithSameWeapon(ComboBox weaponBox, ComboBox[] linkedComboBoxes)
+        {
+            if (weaponBox == linkedComboBoxes[0])
             {
-                linkedComboBoxesMAC[1].SelectedIndex = weaponBox.SelectedIndex;
+                linkedComboBoxes[1].SelectedIndex = weaponBox.SelectedIndex;
             }
-            else if (weaponBox == linkedComboBoxesMAC[1])
+            else if (weaponBox == linkedComboBoxes[1])
             {
-                linkedComboBoxesMAC[0].SelectedIndex = weaponBox.SelectedIndex;
+                linkedComboBoxes[0].SelectedIndex = weaponBox.SelectedIndex;
             }
         }
 
@@ -174,9 +162,15 @@ namespace ServerModGenerator
 
         private void AddWeaponsPrimary()
         {
-            foreach (ComboBox primaryWeaponBox in Generatorgui.WeaponDropDownPrimary)
+            AddPrimaryWeaponsToGivenDropdown(Generatorgui.PrimaryAllLoadout);
+            AddPrimaryWeaponsToGivenDropdown(Generatorgui.FiltersPrimary);
+        }
+
+        private void AddPrimaryWeaponsToGivenDropdown(ComboBox[] weaponDropdowns)
+        {
+            foreach (ComboBox primaryWeaponBox in weaponDropdowns)
             {
-                primaryWeaponBox.Items.Add("=== PRIMARY ===");
+                primaryWeaponBox.Items.Add("==== PRIMARY ====");
 
                 foreach (string primaryWeapon in Generatorgui.GetWeaponCollections().GetWeaponsPrimary())
                 {
@@ -186,20 +180,24 @@ namespace ServerModGenerator
                     }
                 }
 
-                primaryWeaponBox.Items.Add("== SECONDARY ==");
-
-                foreach (string secondaryWeapon in Generatorgui.GetWeaponCollections().GetWeaponsSecondary())
-                {
-                    primaryWeaponBox.Items.Add(secondaryWeapon);
-                }
+                AddWeaponCollectionToGivenDropdown(primaryWeaponBox, Generatorgui.GetWeaponCollections().GetWeaponsSecondary(), "=== SECONDARY ===");
+                AddWeaponCollectionToGivenDropdown(primaryWeaponBox, Generatorgui.GetWeaponCollections().GetWeaponsPrimarySP(), "=== SP|PRIMARY ===");
+                AddWeaponCollectionToGivenDropdown(primaryWeaponBox, Generatorgui.GetWeaponCollections().GetWeaponsSecondarySP(), "== SP|SECONDARY ==");
+                AddWeaponCollectionToGivenDropdown(primaryWeaponBox, Generatorgui.GetWeaponCollections().GetWeaponsFortunes(), "=== FORTUNES ===");
             }
         }
 
         private void AddWeaponsSecondary()
         {
-            foreach (ComboBox secondaryWeaponBox in Generatorgui.WeaponDropDownSecondary)
+            AddSecondaryWeaponsToGivenDropdown(Generatorgui.SecondaryAllLoadout);
+            AddSecondaryWeaponsToGivenDropdown(Generatorgui.FiltersSecondary);
+        }
+
+        private void AddSecondaryWeaponsToGivenDropdown(ComboBox[] weaponDropdowns)
+        {
+            foreach (ComboBox secondaryWeaponBox in weaponDropdowns)
             {
-                secondaryWeaponBox.Items.Add("== SECONDARY ==");
+                secondaryWeaponBox.Items.Add("=== SECONDARY ===");
 
                 foreach (string secondaryWeapon in Generatorgui.GetWeaponCollections().GetWeaponsSecondary())
                 {
@@ -209,23 +207,36 @@ namespace ServerModGenerator
                     }
                 }
 
-                secondaryWeaponBox.Items.Add("=== PRIMARY ===");
+                AddWeaponCollectionToGivenDropdown(secondaryWeaponBox, Generatorgui.GetWeaponCollections().GetWeaponsPrimary(), "==== PRIMARY ====");
+                AddWeaponCollectionToGivenDropdown(secondaryWeaponBox, Generatorgui.GetWeaponCollections().GetWeaponsSecondarySP(), "== SP|SECONDARY ==");
+                AddWeaponCollectionToGivenDropdown(secondaryWeaponBox, Generatorgui.GetWeaponCollections().GetWeaponsPrimarySP(), "=== SP|PRIMARY ===");
+                AddWeaponCollectionToGivenDropdown(secondaryWeaponBox, Generatorgui.GetWeaponCollections().GetWeaponsFortunes(), "=== FORTUNES ===");
+            }
+        }
 
-                foreach (string primaryWeapon in Generatorgui.GetWeaponCollections().GetWeaponsPrimary())
-                {
-                    secondaryWeaponBox.Items.Add(primaryWeapon);
-                }
+        private void AddWeaponCollectionToGivenDropdown(ComboBox weaponBox, string[] weaponCollection, string collectionName = "")
+        {
+            if (collectionName != "")
+            {
+                weaponBox.Items.Add(collectionName);
+            }
+            foreach (string weapon in weaponCollection)
+            {
+                weaponBox.Items.Add(weapon);
             }
         }
 
         private void AddWeaponDisableOption()
         {
-            foreach (ComboBox combobox in Generatorgui.WeaponDropDownPrimary)
-            {
-                combobox.Items.Add("=== OTHERS ===");
-                combobox.Items.Add("Disable");
-            }
-            foreach (ComboBox combobox in Generatorgui.WeaponDropDownSecondary)
+            AddDisabledOptionToDropdown(Generatorgui.PrimaryAllLoadout);
+            AddDisabledOptionToDropdown(Generatorgui.SecondaryAllLoadout);
+            AddDisabledOptionToDropdown(Generatorgui.FiltersPrimary);
+            AddDisabledOptionToDropdown(Generatorgui.FiltersSecondary);
+        }
+
+        private void AddDisabledOptionToDropdown(ComboBox[] weaponDropdownCollection)
+        {
+            foreach (ComboBox combobox in weaponDropdownCollection)
             {
                 combobox.Items.Add("=== OTHERS ===");
                 combobox.Items.Add("Disable");

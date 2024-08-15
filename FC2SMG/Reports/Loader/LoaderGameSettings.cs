@@ -50,6 +50,22 @@ namespace FC2SMG.Reports.Loader
             {
                 reportLoader.reportManager.GeneratorGui.SetRespawnTimeCollection(collectionSettings, collectionDefaultValue);
             }
+            else if (testGameSettings == Enum_SettingsGame.SCOREDM)
+            {
+                reportLoader.reportManager.GeneratorGui.SetScoresDMCollection(collectionSettings, collectionDefaultValue);
+            }
+            else if (testGameSettings == Enum_SettingsGame.SCORETDM)
+            {
+                reportLoader.reportManager.GeneratorGui.SetScoresTDMCollection(collectionSettings, collectionDefaultValue);
+            }
+            else if (testGameSettings == Enum_SettingsGame.SCORECTD)
+            {
+                reportLoader.reportManager.GeneratorGui.SetScoresCTDCollection(collectionSettings, collectionDefaultValue);
+            }
+            else if (testGameSettings == Enum_SettingsGame.SCOREUPR)
+            {
+                reportLoader.reportManager.GeneratorGui.SetScoresUPRCollection(collectionSettings, collectionDefaultValue);
+            }
             else if (testGameSettings == Enum_SettingsGame.SHIELD)
             {
                 reportLoader.reportManager.GeneratorGui.SetSpawnShieldCollection(collectionSettings, collectionDefaultValue);

@@ -38,5 +38,10 @@ namespace ServerModGenerator
         public static string Uzi { get { return "Uzi"; } }
         public static string Eagle { get { return "DesertEagle"; } }
         public static string Silent6P9 { get { return "Silenced 6P9"; } }
+
+        // Fortunes Pack Weapons
+        public static string Crossbow { get { return "Crossbow"; } }
+        public static string SilentShotgun { get { return "SilencedShotgun"; } }
+        public static string SawedOffShotgun { get { return "SawedOffShotgun"; } }
     }
 }

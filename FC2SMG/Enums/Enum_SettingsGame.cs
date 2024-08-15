@@ -8,6 +8,10 @@ namespace FC2SMG.Enums
         PREROUND,
         RESPAWN,
         SHIELD,
+        SCORECTD,
+        SCOREDM,
+        SCORETDM,
+        SCOREUPR,
         ZONE
     }
 }
